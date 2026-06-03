@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+
+  "name": "InsightTube AI",
+
+  "version": "2.0",
+
+  "description": "AI assistant for YouTube videos",
+
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "http://127.0.0.1:5001/*",
+    "https://www.youtube.com/*"
+  ],
+
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

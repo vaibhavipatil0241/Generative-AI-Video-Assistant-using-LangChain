@@ -1,0 +1,14 @@
+flask
+flask-cors
+gunicorn
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-huggingface
+langchain-groq
+sentence-transformers
+faiss-cpu
+youtube-transcript-api
+pytube
+scikit-learn
+torch
+transformers

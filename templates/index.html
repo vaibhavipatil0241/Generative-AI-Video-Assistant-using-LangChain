@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>YouTube RAG Chatbot</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            height: 100vh;
+
+            margin: 0;
+        }
+
+        .chat-container {
+
+            width: 700px;
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+
+            text-align: center;
+
+            margin-bottom: 20px;
+        }
+
+        #chat-box {
+
+            height: 500px;
+
+            overflow-y: auto;
+
+            border: 1px solid #ddd;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #fafafa;
+
+            margin-bottom: 15px;
+        }
+
+        .input-area {
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+        input {
+
+            flex: 1;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid #ccc;
+
+            font-size: 15px;
+        }
+
+        button {
+
+            padding: 12px 18px;
+
+            border: none;
+
+            background: #007bff;
+
+            color: white;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+        button:hover {
+
+            background: #0056b3;
+        }
+
+        .user {
+
+            background: #eef4ff;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-top: 10px;
+
+            line-height: 1.6;
+        }
+
+        .bot {
+
+            background: #f1fff1;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-top: 10px;
+
+            line-height: 1.7;
+        }
+
+        .system {
+
+            background: #fff8e1;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-top: 10px;
+
+            line-height: 1.6;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="chat-container">
+
+    <h2>YouTube RAG Chatbot</h2>
+
+  <!-- YouTube URL Input -->
+
+<div class="input-area">
+
+    <input
+        type="text"
+        id="video_url"
+        placeholder="Paste YouTube URL..."
+    >
+
+    <button onclick="loadVideo()">
+        Load Video
+    </button>
+
+
+    </div>
+
+    <!-- Chat Box -->
+
+    <div id="chat-box"></div>
+
+    <!-- User Question -->
+
+    <div class="input-area">
+
+        <input
+            type="text"
+            id="message"
+            placeholder="Ask something..."
+        >
+
+        <button onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+async function loadVideo() {
+
+    let videoUrl =
+        document.getElementById("video_url").value;
+
+    if(videoUrl.trim() === "") return;
+
+    let formData = new FormData();
+
+    formData.append("video_url", videoUrl);
+
+    let response = await fetch("/load_video", {
+
+        method: "POST",
+
+        body: formData
+    });
+
+    let data = await response.json();
+
+    let chatBox =
+        document.getElementById("chat-box");
+
+    chatBox.innerHTML += `
+
+        <div class="system">
+
+            <b>System:</b><br><br>
+
+            ${data.status}
+
+        </div>
+
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function sendMessage() {
+
+    let message =
+        document.getElementById("message").value;
+
+    if(message.trim() === "") return;
+
+    let formData = new FormData();
+
+    formData.append("message", message);
+
+    let response = await fetch("/predict", {
+
+        method: "POST",
+
+        body: formData
+    });
+
+    let data = await response.json();
+
+    let chatBox =
+        document.getElementById("chat-box");
+
+    // User Message
+
+    chatBox.innerHTML += `
+
+        <div class="user">
+
+            <b>You:</b><br><br>
+
+            ${message}
+
+        </div>
+
+    `;
+
+    // Bot Message
+
+    chatBox.innerHTML += `
+
+        <div class="bot">
+
+            <b>Bot:</b><br><br>
+
+            ${data.response.replace(/\n/g, "<br>")}
+
+        </div>
+
+    `;
+
+    document.getElementById("message").value = "";
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+</script>
+
+</body>
+
+</html>

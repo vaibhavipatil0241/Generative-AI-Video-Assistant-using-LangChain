@@ -205,7 +205,7 @@ Generative-AI-Video-Assistant/
 
 ## English Video Interaction
 
-![English Demo](screenshots/english_demo.png)
+![English Demo](english_demo.png)
 
 *AI-generated response from YouTube video content in English.*
 
@@ -213,7 +213,7 @@ Generative-AI-Video-Assistant/
 
 ## Hindi Translation Support
 
-![Hindi Demo](screenshots/hindi_demo.png)
+![Hindi Demo](hindi_demo.png)
 
 *Translation and explanation of video content in Hindi.*
 

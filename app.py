@@ -52,49 +52,65 @@ except:
 # -----------------------------------
 import os
 llm = ChatGroq(
-
-    groq_api_key=os.getenv("GROQ_API_KEY"),
-    model_name="llama-3.1-8b-instant",
-
-    temperature=0.1
+    model="openai/gpt-oss-20b",
+    temperature=0
 )
 
 # -----------------------------------
 # Prompt Template
 # -----------------------------------
 
+
+
 prompt = PromptTemplate(
 
     template="""
-You are a helpful AI assistant.
+You are a helpful AI video assistant.
 
-Answer ONLY from the provided context.
+Answer ONLY from the provided video transcript context.
+Do not make up information.
 
-You MUST answer in the EXACT format below.
+You MUST follow the exact output format below:
 
-what is :
-<write 2 concise sentences>
+Definition:
+<Write a definition in 1-2 sentences only if a definition is available in the context. Otherwise, leave it blank.>
+
+What is:
+<Write 2 concise sentences explaining the answer.>
 
 Key Points:
-• point 1
-• point 2
-• point 3
-• point 4
+• Point 1
+• Point 2
+• Point 3
+• Point 4
 
 Summary:
-<write 2 concise sentences>
-defination give only when there is it some definition in the context otherwise leave it blank
+<Write 2 concise sentences summarizing the answer.>
 
-Rules:
-- Translate the final answer into English before responding
-- Never answer in Hindi
-- Even if context is Hindi, output must be English only
-- Use simple professional language
-- Keep answers concise but informative
-- Use bullet points only when useful
-- Avoid unnecessary headings
-- Do not repeat information
-- Format answers cleanly
+LANGUAGE RULES:
+- Identify the language requested by the user.
+- If the user asks for Hindi, respond completely in Hindi using Devanagari script.
+- If the user asks for English, respond completely in English.
+- If the user requests another language, respond in that language.
+- If the user asks to translate what the speaker says, translate the relevant transcript content into the requested language.
+- Never force English when the user explicitly requests another language.
+- Preserve the original meaning of the speaker.
+
+ANSWER RULES:
+- Use simple and professional language.
+- Keep answers concise but informative.
+- Use bullet points for key points.
+- Avoid unnecessary repetition.
+- Do not add information outside the provided context.
+- If the context does not contain the answer, clearly mention that the information is not available in the transcript.
+
+TRANSLATION RULES:
+- If the user asks to translate the video into Hindi, translate the relevant transcript content into Hindi.
+- Even if the transcript is already in Hindi, translate any English words or sentences into Hindi wherever possible.
+- If the transcript contains both Hindi and English (Hinglish), convert it into natural, fluent Hindi using Devanagari script.
+- Do not say that a translation is unavailable just because the transcript is already in Hindi.
+- Do not merely describe the transcript language. Provide the translated content.
+- Preserve the speaker's original meaning.
 
 Context:
 {context}
